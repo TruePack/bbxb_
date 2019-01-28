@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from .models import Document, Person
 
@@ -20,3 +20,10 @@ class PersonListView(ListView):
         context["documents"] = Document.objects.filter(
             type_of_document="Passport")
         return context
+
+
+class PersonDetailView(DetailView):
+    """Detail view for Person`s model"""
+
+    model = Person
+    template_name = "persons/person_detail.html"
