@@ -1,0 +1,56 @@
+<h1>Persons</h1>
+<table>
+    <tr>
+        <th>Full name</th>
+        <th>Date of birthday</th>
+        <th>Gender</th>
+        <th>Telephone number</th>
+        <th>Started to study</th>
+        <th>Finished to study</th>
+        <th>Study group</th>
+        <th>Educational institution</th>
+        <th>Passport ID <br> (if exist)</th>
+    </tr>
+    {% for person in persons %}
+        <tr>
+        <td> <a href="{{ person.get_absolute_url}}"> {{ person.full_name}}</a> </td>
+        <td> {{ person.date_of_birthday }}</td>
+        <td> {{ person.gender }}</td>
+        <td> {{ person.telephone_number }}</td>
+        <td> {{ person.start_date_study }}</td>
+        <td> {{ person.end_date_study }}</td>
+        <td> {{ person.study_group }}</td>
+        <td> {{ person.educational_institution }}</td>
+        {% for document in documents %}
+            {% if document.owner|stringformat:"s" == person.full_name|stringformat:"s"%}
+                <td>{{ document.number }}</td>
+            {% endif %}
+        {% endfor %}
+        </tr>
+        {% endfor %}
+</table>
+{% block pagination %}
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                <!--First page link-->
+                {% if page_obj.number != 1 %}
+                    <a href="{{ request.path }}?page=1"> &laquo; first</a>
+                {% endif %}
+                <!--Previous page link-->
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <!--Next page link-->
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+                <!--Last page link-->
+                {% if page_obj.number != page_obj.paginator.num_pages %}
+                    <a href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}"> last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% endblock %}
