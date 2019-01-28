@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body {
+        margin: 20px;
+    }
+    h2 {
+        margin: -15px;
+        padding: -15px;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>{{ person.full_name}}</h2> <div class="edit">
+    <h3>Date of birthday</h3>{{ person.date_of_birthday }}<hr noshade size="2" color="black">
+    <h3>Gender</h3>{{ person.gender }}<hr noshade size="2" color="black">
+    <h3>Telephone number</h3>{{ person.telephone_number }}<hr noshade size="2" color="black">
+    <h3>Started to study</h3>{{ person.start_date_study }}<hr noshade size="2" color="black">
+    <h3>Finished to study</h3>{{ person.end_date_study }}<hr noshade size="2" color="black">
+    <h3>Study group</h3>{{ person.study_group }}<hr noshade size="2" color="black">
+    <h3>Educational institution</h3>{{ person.educational_institution }}<hr noshade size="2" color="black">
+    <h3>Documents</h3>
+    {% for document in person.owner.all %}
+        <h4>{{ document.type_of_document }}</h4>
+        ID: {{ document.number }}<br>
+        Date of receiving: {{ document.date_of_receiving }}<br>
+        {% if document.scan_of_document %}
+            Scan:<img src="{{ document.scan_of_document.url }}" width="300"/><hr>
+        {% else %}
+            Document doesn't has scanned copy.
+        {% endif %}
+    {% endfor %}
+
+
+</body>
+</html>
