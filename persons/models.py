@@ -77,3 +77,57 @@ class Person(models.Model):
         if self.start_date_study < self.date_of_birthday:
             raise ValidationError("You cant start study before birth. :^)")
 
+
+class Document(models.Model):
+    """
+    Class defining a Document's model.
+    """
+
+    def upload_location(self, filename):
+        """
+        Path to uploaded scans.
+
+        Return path with format /owner/type_of/document/filename.
+        """
+        return f"{self.owner}/{self.type_of_document}/{filename}"
+
+    STUDENT_ID = "Student ID"
+    PASSPORT = "Passport"
+    BIRTH_CERTIFICATE = "Birth certificate"
+    DRIVER_LICENSE = "Driver's license"
+
+    # Choices for document`s type field.
+    DOCUMENT_TYPES = (
+        (STUDENT_ID, "Student ID"),
+        (PASSPORT, "Passport"),
+        (BIRTH_CERTIFICATE, "Birth certificate"),
+        (DRIVER_LICENSE, "Driver's license"),
+    )
+
+    number = models.CharField(max_length=10, unique=True)
+    date_of_receiving = models.DateField()
+    type_of_document = models.CharField(max_length=17, choices=DOCUMENT_TYPES)
+    scan_of_document = models.ImageField(null=True, blank=True,
+                                         upload_to=upload_location)
+    # Many-to-one with Person's model
+    owner = models.ForeignKey(Person, related_name="owner",
+                              on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["owner", "type_of_document", "date_of_receiving"]
+        verbose_name = "Document"
+        verbose_name_plural = "Documents"
+
+    def __str__(self):
+        """
+        String for representing the Document object (in Admin site etc.)
+        """
+        return f"{self.owner} {self.type_of_document}"
+
+    def get_absolute_url(self):
+        """
+        Returns the url to access a particular instance of Document.
+        """
+        return f"documents/document_id_{self.id}"
+
+
