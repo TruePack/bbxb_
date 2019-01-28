@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Document, Person
 from .forms import PersonForm
 
+
 class PersonListView(ListView):
     """
     ListView for Person`s model
